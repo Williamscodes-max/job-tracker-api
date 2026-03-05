@@ -1,22 +1,24 @@
 from django.db import models
-from django.contrib.auth.models import User
 
-class JobApplication(models.Model):
-    STATUS_CHOICES = [
-        ('applied', 'Applied'),
-        ('interview', 'Interview'),
-        ('offer', 'Offer'),
-        ('rejected', 'Rejected'),
-    ]
-
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='applications')
-    company_name = models.CharField(max_length=255)
-    position = models.CharField(max_length=255)
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='applied')
-    applied_date = models.DateField()
-    notes = models.TextField(blank=True, null=True)
-    created_at = models.DateTimeField(auto_now_add=True)
+class Job(models.Model):
+    title = models.CharField(max_length=255)
+    description = models.TextField(blank=True)
+    company = models.CharField(max_length=255)
+    location = models.CharField(max_length=255, blank=True)
+    posted_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"{self.position} at {self.company_name}"
+        return self.title
+
+
+class Application(models.Model):
+    job = models.ForeignKey(Job, on_delete=models.CASCADE, related_name='applications')
+    applicant_name = models.CharField(max_length=255)
+    email = models.EmailField()
+    resume_link = models.URLField(blank=True)
+    cover_letter = models.TextField(blank=True)
+    applied_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.applicant_name} - {self.job.title}"
