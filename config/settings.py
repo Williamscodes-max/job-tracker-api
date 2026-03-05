@@ -2,18 +2,32 @@ import os
 from pathlib import Path
 from dotenv import load_dotenv
 
-# Load .env file
-load_dotenv()
-
+# -------------------------
+# Base directory and env
+# -------------------------
 BASE_DIR = Path(__file__).resolve().parent.parent
+load_dotenv(BASE_DIR / ".env")  # loads variables from .env
 
-SECRET_KEY = os.getenv("SECRET_KEY")
+# -------------------------
+# Environment (local vs production)
+# -------------------------
+ENVIRONMENT = os.getenv("ENVIRONMENT", "local")  # local or production
 
-DEBUG = os.getenv("DEBUG", "False") == "True"
+if ENVIRONMENT == "local":
+    DEBUG = True
+    ALLOWED_HOSTS = []
+else:
+    DEBUG = False
+    ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "").split(",")
 
-ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "localhost").split(",")
+# -------------------------
+# Secret key
+# -------------------------
+SECRET_KEY = os.getenv("SECRET_KEY", "django-insecure-fallback-key")
 
-# Application definition
+# -------------------------
+# Installed apps
+# -------------------------
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -26,10 +40,13 @@ INSTALLED_APPS = [
     'rest_framework',
     'django_filters',
 
-    # Local
+    # Local apps
     'applications',
 ]
 
+# -------------------------
+# Middleware
+# -------------------------
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -42,6 +59,9 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'config.urls'
 
+# -------------------------
+# Templates
+# -------------------------
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -58,9 +78,14 @@ TEMPLATES = [
     },
 ]
 
+# -------------------------
+# WSGI
+# -------------------------
 WSGI_APPLICATION = 'config.wsgi.application'
 
-# Database (SQLite for now, later you can use PostgreSQL on Railway)
+# -------------------------
+# Database (SQLite for now)
+# -------------------------
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -68,23 +93,35 @@ DATABASES = {
     }
 }
 
+# -------------------------
 # Password validation
+# -------------------------
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
+    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
 ]
 
+# -------------------------
 # Internationalization
+# -------------------------
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
+# -------------------------
 # Static files
+# -------------------------
 STATIC_URL = '/static/'
 
+# -------------------------
+# Default primary key field
+# -------------------------
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# -------------------------
+# Optional: debug prints for verification
+# -------------------------
+if ENVIRONMENT == "local":
+    print("Running locally with DEBUG=True")
+    print("ALLOWED_HOSTS =", ALLOWED_HOSTS)
