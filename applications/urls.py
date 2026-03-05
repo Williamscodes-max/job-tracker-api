@@ -1,7 +1,10 @@
 from django.urls import path
-from .views import JobApplicationListCreateView, JobApplicationRetrieveUpdateDestroyView
+from .views import JobListCreateView, JobDetailView, ApplicationListCreateView, ApplicationDetailView
 
 urlpatterns = [
-    path('applications/', JobApplicationListCreateView.as_view(), name='application-list-create'),
-    path('applications/<int:pk>/', JobApplicationRetrieveUpdateDestroyView.as_view(), name='application-detail'),
+    path('jobs/', JobListCreateView.as_view()),
+    path('jobs/<int:pk>/', JobDetailView.as_view()),
+
+    path('applications/', ApplicationListCreateView.as_view()),
+    path('applications/<int:pk>/', ApplicationDetailView.as_view()),
 ]

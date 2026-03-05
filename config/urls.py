@@ -24,14 +24,24 @@ Including another URLconf
 
 from django.contrib import admin
 from django.http import JsonResponse
-from django.urls import path
+from django.urls import path, include
 
-def home(request):
+
+def api_home(request):
     return JsonResponse({
-        "message": "Job Tracker API is running successfully"
+        "API": "Job Application Tracker API",
+        "status": "running",
+        "endpoints": {
+            "jobs_list_create": "/api/jobs/",
+            "job_detail": "/api/jobs/<id>/",
+            "applications_list_create": "/api/applications/",
+            "application_detail": "/api/applications/<id>/"
+        }
     })
 
+
 urlpatterns = [
-    path('', home),
+    path('', api_home),
     path('admin/', admin.site.urls),
+    path('api/', include('applications.urls')),
 ]
