@@ -12,9 +12,9 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 
 import os
 from pathlib import Path
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 
-load_dotenv()  # load variables from .env
+# load_dotenv()  # load variables from .env
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -129,6 +129,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 
 REST_FRAMEWORK = {
@@ -144,3 +145,8 @@ REST_FRAMEWORK = {
         'rest_framework.filters.SearchFilter',
     ],
 }
+
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://web-production-d90aba.up.railway.app"
+]
