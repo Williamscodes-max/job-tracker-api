@@ -18,7 +18,9 @@ if ENVIRONMENT == "local":
     ALLOWED_HOSTS = []
 else:
     DEBUG = False
-    ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "").split(",")
+    import os
+
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "localhost,127.0.0.1,web-production-d90aba.up.railway.app").split(",")
 
 # -------------------------
 # Secret key
